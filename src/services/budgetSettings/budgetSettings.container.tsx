@@ -5,11 +5,24 @@ import { BudgetSettingsForm } from "./BudgetSettingsForm/BudgetSettingsForm";
 const { inputs, outputs } = budgetSettingsService;
 
 export const BudgetSettingsContainer = () => {
-  const { isOpen, close, averageExpenses, setAverageExpenses } = useUnit({
+  const {
+    isOpen,
+    close,
+    averageExpenses,
+    setAverageExpenses,
+    monthEvents,
+    addMonthEvent,
+    removeMonthEvent,
+    editMonthEvent,
+  } = useUnit({
     close: inputs.close,
     isOpen: outputs.$isOpen,
     setAverageExpenses: inputs.setAverageExpenses,
     averageExpenses: outputs.$averageExpenses,
+    monthEvents: outputs.$monthEvents,
+    addMonthEvent: inputs.addMonthEvent,
+    removeMonthEvent: inputs.removeMonthEvent,
+    editMonthEvent: inputs.editMonthEvent,
   });
 
   return (
@@ -18,6 +31,10 @@ export const BudgetSettingsContainer = () => {
       close={close}
       averageExpenses={averageExpenses}
       setAverageExpenses={setAverageExpenses}
+      monthEvents={monthEvents}
+      addMonthEvent={addMonthEvent}
+      removeMonthEvent={removeMonthEvent}
+      editMonthEvent={editMonthEvent}
     />
   );
 };

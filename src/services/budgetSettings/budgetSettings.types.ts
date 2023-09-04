@@ -1,5 +1,6 @@
 export type MonthEvent = {
-  value: number | null;
-  date: string;
-  emoji: string;
+  id: number;
+  value: string | null;
+  day: number | null;
+  emoji: string | null;
 };
