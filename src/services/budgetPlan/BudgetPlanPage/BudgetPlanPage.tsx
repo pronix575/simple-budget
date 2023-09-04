@@ -31,6 +31,8 @@ export const BudgetPlanPage: FC<BudgetPlanPageProps> = ({
   addBudgetPlanItem,
   removeBudgetPlanItem,
   editBudgetPlanItemValue,
+  openSettings,
+  averageExpenses,
 }) => {
   console.log(period, budgetPlanItems);
 
@@ -56,13 +58,14 @@ export const BudgetPlanPage: FC<BudgetPlanPageProps> = ({
           sum +
           planItems.reduce((acc, elem) => {
             return acc + (elem.value || 0);
-          }, 0);
+          }, 0) -
+          (averageExpenses || 0);
 
         sum = planItemSum;
 
         return { ...elem, planItems, planItemSum };
       });
-  }, [budgetPlanItems, period]);
+  }, [averageExpenses, budgetPlanItems, period]);
 
   const maxSum =
     periodsArray?.reduce(
@@ -88,6 +91,7 @@ export const BudgetPlanPage: FC<BudgetPlanPageProps> = ({
             />
           </FormItem>
           <Button
+            onClick={openSettings}
             icon={
               <GearWideConnected
                 style={{ transform: "translateY(2px)", fontSize: 18 }}

@@ -50,3 +50,34 @@ export const Input: React.FC<{
     />
   );
 };
+
+export const InputSimple: React.FC<{
+  onChange: (payload: number | null) => void;
+  value: number | null;
+}> = ({ value: initValue, onChange }) => {
+  const [value, setValue] = useState(initValue ? String(initValue) : "");
+
+  const handleUpdate = useCallback(
+    (value: string) =>
+      onChange(
+        value === "" ? null : !isNaN(Number(value)) ? Number(value) : initValue
+      ),
+    [initValue, onChange]
+  );
+
+  useEffect(() => {
+    if (value === "-") return;
+
+    handleUpdate(value);
+  }, [handleUpdate, value]);
+
+  return (
+    <InputSC
+      style={{ width: "100%" }}
+      onChange={(e) => setValue(e.target.value || "")}
+      placeholder="Cумма"
+      value={value ?? ""}
+      allowClear
+    />
+  );
+};

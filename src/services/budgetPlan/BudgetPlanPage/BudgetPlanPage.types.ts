@@ -11,4 +11,6 @@ export type BudgetPlanPageProps = {
     id: number;
     value: number | null;
   }) => void;
+  openSettings: () => void;
+  averageExpenses: number | null;
 };
