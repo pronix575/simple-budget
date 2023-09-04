@@ -84,9 +84,10 @@ export const PercentBlock = styled.div<{ percent: number }>`
   border-right: 1px solid #4479ff;
   display: flex;
   align-items: center;
-  height: 100%;
-  padding: 8px 16px 8px;
+  height: 49px !important;
   z-index: 7;
+  height: 30px;
+  transform: translate(-10px, -15px);
   position: absolute;
 `;
 
