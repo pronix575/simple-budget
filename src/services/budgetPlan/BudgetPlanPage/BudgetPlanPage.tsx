@@ -20,6 +20,7 @@ import FormItem from "antd/es/form/FormItem";
 import weekend from "dayjs/plugin/weekday";
 import { getWeekendDay } from "./BudgetPlanPage.utils";
 import { Input } from "./Input";
+import { Input as InputAntd } from "antd";
 
 dayjs.extend(weekend);
 dayjs.locale("ru");
@@ -35,8 +36,6 @@ export const BudgetPlanPage: FC<BudgetPlanPageProps> = ({
   averageExpenses,
   monthEvents,
 }) => {
-  console.log(period, budgetPlanItems);
-
   const periodsArray = useMemo(() => {
     if (!period) return null;
 
@@ -76,7 +75,7 @@ export const BudgetPlanPage: FC<BudgetPlanPageProps> = ({
           ...elem,
           planItems,
           planItemSum,
-          filteredMonths: filteredMonthEvents,
+          monthsEvent: filteredMonthEvents,
         };
       });
   }, [averageExpenses, budgetPlanItems, monthEvents, period]);
@@ -152,6 +151,12 @@ export const BudgetPlanPage: FC<BudgetPlanPageProps> = ({
                   {period.planItemSum.toLocaleString()}
                 </Sum>
                 <SumsWrapper>
+                  {period.monthsEvent.map((elem) => (
+                    <InputAntd
+                      value={elem.value || ""}
+                      style={{ width: "120px" }}
+                    />
+                  ))}
                   {period.planItems.map((elem) => (
                     <Input
                       key={elem.id}
