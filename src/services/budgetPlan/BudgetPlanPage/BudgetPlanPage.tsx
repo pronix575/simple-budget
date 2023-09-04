@@ -92,7 +92,9 @@ export const BudgetPlanPage: FC<BudgetPlanPageProps> = ({
                   </DiffWrapper>
                 )}
               </div>
-              <strong>{period.planItemSum.toLocaleString()}</strong>
+              <strong style={{ color: period.planItemSum < 0 ? "red" : "inherit" }}>
+                {period.planItemSum.toLocaleString()}
+              </strong>
               <SumsWrapper>
                 {period.planItems.map((elem) => (
                   <Input
