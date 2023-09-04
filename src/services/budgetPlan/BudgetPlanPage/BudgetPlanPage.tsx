@@ -5,7 +5,6 @@ import {
   DateItem,
   DiffWrapper,
   Header,
-  InputSC,
   Layout,
   Logo,
   PercentBlock,
@@ -13,18 +12,14 @@ import {
   SumsWrapper,
   Wrapper,
 } from "./BudgetPlanPage.styled";
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { FC, useMemo } from "react";
 import { BudgetPlanPageProps } from "./BudgetPlanPage.types";
 import dayjs, { Dayjs } from "dayjs";
-import {
-  GearWideConnected,
-  PlusCircleFill,
-  XCircleFill,
-} from "react-bootstrap-icons";
-import { BudgetPlanItem } from "../budgetPlan.types";
+import { GearWideConnected, PlusCircleFill } from "react-bootstrap-icons";
 import FormItem from "antd/es/form/FormItem";
 import weekend from "dayjs/plugin/weekday";
 import { getWeekendDay } from "./BudgetPlanPage.utils";
+import { Input } from "./Input";
 
 dayjs.extend(weekend);
 dayjs.locale("ru");
@@ -170,52 +165,5 @@ export const BudgetPlanPage: FC<BudgetPlanPageProps> = ({
         </Content>
       </Wrapper>
     </Layout>
-  );
-};
-
-const Input: React.FC<{
-  editBudgetPlanItemValue: (payload: {
-    id: number;
-    value: number | null;
-  }) => void;
-  elem: BudgetPlanItem;
-  removeBudgetPlanItem: (payload: number) => void;
-}> = ({ editBudgetPlanItemValue, elem, removeBudgetPlanItem }) => {
-  const [value, setValue] = useState(elem.value ? String(elem.value) : "");
-
-  const handleUpdate = useCallback(
-    (value: string) =>
-      editBudgetPlanItemValue({
-        id: elem.id,
-        value:
-          value === ""
-            ? null
-            : !isNaN(Number(value))
-            ? Number(value)
-            : elem.value,
-      }),
-    [editBudgetPlanItemValue, elem.id, elem.value]
-  );
-
-  useEffect(() => {
-    if (value === "-") return;
-
-    handleUpdate(value);
-  }, [handleUpdate, value]);
-
-  return (
-    <InputSC
-      onChange={(e) => setValue(e.target.value || "")}
-      status={elem.value && elem.value < 0 ? "error" : undefined}
-      placeholder="Cумма"
-      key={elem.id}
-      value={value ?? ""}
-      suffix={
-        <XCircleFill
-          className="x-circle"
-          onClick={() => removeBudgetPlanItem(elem.id)}
-        />
-      }
-    />
   );
 };
