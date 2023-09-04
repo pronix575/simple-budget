@@ -3,10 +3,7 @@ import { styled } from "styled-components";
 
 export const Layout = styled.div``;
 
-export const Wrapper = styled.div`
-  display: grid;
-  grid-template-columns: 1280px 1fr;
-`;
+export const Wrapper = styled.div``;
 
 export const Logo = styled.div`
   font-weight: bold;
@@ -33,8 +30,6 @@ export const BaseSettingsWrapper = styled.div`
 
 export const Content = styled.div`
   padding: 16px;
-  max-width: 1280px;
-  overflow-x: scroll;
 `;
 
 export const DateItem = styled.div`
@@ -79,7 +74,7 @@ export const DiffWrapper = styled.div<{ isNegative: boolean | null }>`
 `;
 
 export const PercentBlock = styled.div<{ percent: number }>`
-  width: ${({ percent }) => percent}px;
+  width: ${({ percent }) => percent * 1.5}px;
   background-color: #4479ff31;
   border-right: 1px solid #4479ff;
   display: flex;

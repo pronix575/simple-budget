@@ -9,7 +9,6 @@ import {
   Layout,
   Logo,
   PercentBlock,
-  RightPanel,
   Sum,
   SumsWrapper,
   Wrapper,
@@ -17,7 +16,11 @@ import {
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { BudgetPlanPageProps } from "./BudgetPlanPage.types";
 import dayjs, { Dayjs } from "dayjs";
-import { PlusCircleFill, XCircleFill } from "react-bootstrap-icons";
+import {
+  GearWideConnected,
+  PlusCircleFill,
+  XCircleFill,
+} from "react-bootstrap-icons";
 import { BudgetPlanItem } from "../budgetPlan.types";
 import FormItem from "antd/es/form/FormItem";
 import weekend from "dayjs/plugin/weekday";
@@ -34,6 +37,8 @@ export const BudgetPlanPage: FC<BudgetPlanPageProps> = ({
   removeBudgetPlanItem,
   editBudgetPlanItemValue,
 }) => {
+  console.log(period, budgetPlanItems);
+
   const periodsArray = useMemo(() => {
     if (!period) return null;
 
@@ -87,6 +92,13 @@ export const BudgetPlanPage: FC<BudgetPlanPageProps> = ({
               }
             />
           </FormItem>
+          <Button
+            icon={
+              <GearWideConnected
+                style={{ transform: "translateY(2px)", fontSize: 18 }}
+              />
+            }
+          />
         </BaseSettingsWrapper>
       </Header>
       <Wrapper>
@@ -156,7 +168,6 @@ export const BudgetPlanPage: FC<BudgetPlanPageProps> = ({
             );
           })}
         </Content>
-        <RightPanel></RightPanel>
       </Wrapper>
     </Layout>
   );
@@ -170,7 +181,7 @@ const Input: React.FC<{
   elem: BudgetPlanItem;
   removeBudgetPlanItem: (payload: number) => void;
 }> = ({ editBudgetPlanItemValue, elem, removeBudgetPlanItem }) => {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(elem.value ? String(elem.value) : "");
 
   const handleUpdate = useCallback(
     (value: string) =>
