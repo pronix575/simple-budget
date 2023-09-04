@@ -1,4 +1,4 @@
-import { Button, DatePicker } from "antd";
+import { Button, DatePicker, Tooltip } from "antd";
 import {
   BaseSettingsWrapper,
   Content,
@@ -8,14 +8,22 @@ import {
   InputSC,
   Layout,
   Logo,
+  PercentBlock,
+  RightPanel,
+  Sum,
   SumsWrapper,
+  Wrapper,
 } from "./BudgetPlanPage.styled";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
-import { BudgetPlanPageProps } from "./BudgetPlatPage.types";
+import { BudgetPlanPageProps } from "./BudgetPlanPage.types";
 import dayjs, { Dayjs } from "dayjs";
 import { PlusCircleFill, XCircleFill } from "react-bootstrap-icons";
 import { BudgetPlanItem } from "../budgetPlan.types";
+import FormItem from "antd/es/form/FormItem";
+import weekend from "dayjs/plugin/weekday";
+import { getWeekendDay } from "./BudgetPlanPage.utils";
 
+dayjs.extend(weekend);
 dayjs.locale("ru");
 
 export const BudgetPlanPage: FC<BudgetPlanPageProps> = ({
@@ -56,75 +64,100 @@ export const BudgetPlanPage: FC<BudgetPlanPageProps> = ({
       });
   }, [budgetPlanItems, period]);
 
+  const maxSum =
+    periodsArray?.reduce(
+      (acc, elem) => (acc < elem.planItemSum ? elem.planItemSum : acc),
+      0
+    ) || 1;
+
   return (
     <Layout>
       <Header>
         <Logo>бюджет</Logo>
 
         <BaseSettingsWrapper>
-          <DatePicker.RangePicker
-            format="DD.MM.YYYY"
-            value={period}
-            onChange={(date) =>
-              date?.[0] && date[1]
-                ? setPeriod(date as [Dayjs, Dayjs])
-                : setPeriod(null)
-            }
-          />
+          <FormItem label="Выберите период" style={{ margin: 0 }}>
+            <DatePicker.RangePicker
+              format="DD.MM.YYYY"
+              value={period}
+              onChange={(date) =>
+                date?.[0] && date[1]
+                  ? setPeriod(date as [Dayjs, Dayjs])
+                  : setPeriod(null)
+              }
+            />
+          </FormItem>
         </BaseSettingsWrapper>
       </Header>
+      <Wrapper>
+        <Content>
+          {periodsArray?.map((period) => {
+            const diff =
+              period.planItemSum -
+              (periodsArray[period.index - 1]?.planItemSum || 0);
 
-      <Content>
-        {periodsArray?.map((period) => {
-          const diff =
-            period.planItemSum -
-            (periodsArray[period.index - 1]?.planItemSum || 0);
+            const percentOfMax = (period.planItemSum / maxSum) * 100;
 
-          return (
-            <DateItem key={period.index}>
-              <div>{period.index + 1}</div>
-              <div>{period.date.format("DD MMMM YYYY")}</div>
-              <div>
-                {Boolean(diff) && (
-                  <DiffWrapper isNegative={diff < 0}>
-                    {diff > 0 && "+"}
-                    {diff ? diff.toLocaleString() : ""}
-                  </DiffWrapper>
-                )}
-              </div>
-              <strong style={{ color: period.planItemSum < 0 ? "red" : "inherit" }}>
-                {period.planItemSum.toLocaleString()}
-              </strong>
-              <SumsWrapper>
-                {period.planItems.map((elem) => (
-                  <Input
-                    key={elem.id}
-                    elem={elem}
-                    editBudgetPlanItemValue={editBudgetPlanItemValue}
-                    removeBudgetPlanItem={removeBudgetPlanItem}
-                  />
-                ))}
-                <Button
-                  icon={
-                    <PlusCircleFill
-                      style={{
-                        transform: "translateY(2px)",
-                      }}
+            return (
+              <DateItem key={period.index}>
+                <div>{period.index + 1}</div>
+                <div>
+                  <Tooltip
+                    title={getWeekendDay(period.date.weekday())}
+                    color="blue"
+                  >
+                    <strong>{period.date.format("DD")}</strong>{" "}
+                    {period.date.format("MMMM YYYY")}
+                  </Tooltip>
+                </div>
+                <div>
+                  {Boolean(diff) && (
+                    <DiffWrapper isNegative={diff < 0}>
+                      {diff > 0 && "+"}
+                      {diff ? diff.toLocaleString() : ""}
+                    </DiffWrapper>
+                  )}
+                </div>
+                <Sum
+                  style={{
+                    color: period.planItemSum < 0 ? "red" : "inherit",
+                  }}
+                >
+                  <PercentBlock percent={percentOfMax}></PercentBlock>
+                  {period.planItemSum.toLocaleString()}
+                </Sum>
+                <SumsWrapper>
+                  {period.planItems.map((elem) => (
+                    <Input
+                      key={elem.id}
+                      elem={elem}
+                      editBudgetPlanItemValue={editBudgetPlanItemValue}
+                      removeBudgetPlanItem={removeBudgetPlanItem}
                     />
-                  }
-                  onClick={() =>
-                    addBudgetPlanItem({
-                      id: Date.now(),
-                      value: null,
-                      date: period.date.format("DD.MM.YYYY"),
-                    })
-                  }
-                />
-              </SumsWrapper>
-            </DateItem>
-          );
-        })}
-      </Content>
+                  ))}
+                  <Button
+                    icon={
+                      <PlusCircleFill
+                        style={{
+                          transform: "translateY(2px)",
+                        }}
+                      />
+                    }
+                    onClick={() =>
+                      addBudgetPlanItem({
+                        id: Date.now(),
+                        value: null,
+                        date: period.date.format("DD.MM.YYYY"),
+                      })
+                    }
+                  />
+                </SumsWrapper>
+              </DateItem>
+            );
+          })}
+        </Content>
+        <RightPanel></RightPanel>
+      </Wrapper>
     </Layout>
   );
 };
