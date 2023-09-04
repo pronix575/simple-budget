@@ -33,6 +33,7 @@ export const BudgetPlanPage: FC<BudgetPlanPageProps> = ({
   editBudgetPlanItemValue,
   openSettings,
   averageExpenses,
+  monthEvents,
 }) => {
   console.log(period, budgetPlanItems);
 
@@ -54,18 +55,31 @@ export const BudgetPlanPage: FC<BudgetPlanPageProps> = ({
           (item) => item.date === elem.date.format("DD.MM.YYYY")
         );
 
+        const filteredMonthEvents = monthEvents.filter((event) => {
+          return event.day === elem.date.get("D");
+        });
+
         const planItemSum =
           sum +
           planItems.reduce((acc, elem) => {
             return acc + (elem.value || 0);
           }, 0) -
-          (averageExpenses || 0);
+          (averageExpenses || 0) +
+          filteredMonthEvents.reduce(
+            (acc, elem) => acc + (elem.value ? Number(elem.value) : 0),
+            0
+          );
 
         sum = planItemSum;
 
-        return { ...elem, planItems, planItemSum };
+        return {
+          ...elem,
+          planItems,
+          planItemSum,
+          filteredMonths: filteredMonthEvents,
+        };
       });
-  }, [averageExpenses, budgetPlanItems, period]);
+  }, [averageExpenses, budgetPlanItems, monthEvents, period]);
 
   const maxSum =
     periodsArray?.reduce(

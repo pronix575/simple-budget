@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { BudgetPlanItem } from "../budgetPlan.types";
+import { MonthEvent } from "../../budgetSettings/budgetSettings.types";
 
 export type BudgetPlanPageProps = {
   period: [dayjs.Dayjs, dayjs.Dayjs] | null;
@@ -13,4 +14,5 @@ export type BudgetPlanPageProps = {
   }) => void;
   openSettings: () => void;
   averageExpenses: number | null;
+  monthEvents: MonthEvent[];
 };

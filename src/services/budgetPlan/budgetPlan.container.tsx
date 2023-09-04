@@ -16,6 +16,7 @@ export const BudgetPlanContainer = () => {
     editBudgetPlanItemValue,
     openSettings,
     averageExpenses,
+    monthEvents,
   } = useUnit({
     period: outputs.$budgetPeriodDate,
     setPeriod: inputs.setBudgetPeriodDate,
@@ -25,6 +26,7 @@ export const BudgetPlanContainer = () => {
     editBudgetPlanItemValue: inputs.editBudgetPlanItemValue,
     openSettings: budgetSettingsService.inputs.open,
     averageExpenses: budgetSettingsService.outputs.$averageExpenses,
+    monthEvents: budgetSettingsService.outputs.$monthEvents,
   });
 
   return (
@@ -39,6 +41,7 @@ export const BudgetPlanContainer = () => {
         editBudgetPlanItemValue={editBudgetPlanItemValue}
         openSettings={openSettings}
         averageExpenses={averageExpenses}
+        monthEvents={monthEvents}
       />
     </>
   );
