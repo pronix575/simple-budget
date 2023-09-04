@@ -15,7 +15,7 @@ import {
 import { FC, useMemo } from "react";
 import { BudgetPlanPageProps } from "./BudgetPlanPage.types";
 import dayjs, { Dayjs } from "dayjs";
-import { GearWideConnected, PlusCircleFill } from "react-bootstrap-icons";
+import { GearWideConnected, PlusCircleFill, Repeat } from "react-bootstrap-icons";
 import FormItem from "antd/es/form/FormItem";
 import weekend from "dayjs/plugin/weekday";
 import { getWeekendDay } from "./BudgetPlanPage.utils";
@@ -154,6 +154,7 @@ export const BudgetPlanPage: FC<BudgetPlanPageProps> = ({
                   {period.monthsEvent.map((elem) => (
                     <InputAntd
                       value={elem.value || ""}
+                      suffix={<Repeat />}
                       style={{ width: "120px" }}
                     />
                   ))}
