@@ -15,7 +15,11 @@ import {
 import { FC, useMemo } from "react";
 import { BudgetPlanPageProps } from "./BudgetPlanPage.types";
 import dayjs, { Dayjs } from "dayjs";
-import { GearWideConnected, PlusCircleFill, Repeat } from "react-bootstrap-icons";
+import {
+  GearWideConnected,
+  PlusCircleFill,
+  Repeat,
+} from "react-bootstrap-icons";
 import FormItem from "antd/es/form/FormItem";
 import weekend from "dayjs/plugin/weekday";
 import { getWeekendDay } from "./BudgetPlanPage.utils";
@@ -122,8 +126,13 @@ export const BudgetPlanPage: FC<BudgetPlanPageProps> = ({
 
             const percentOfMax = (period.planItemSum / maxSum) * 100;
 
+            const isCurrentDay = period.date.isSame(dayjs(), "day");
+
             return (
-              <DateItem key={period.index}>
+              <DateItem
+                key={period.index}
+                style={{ color: isCurrentDay ? "#0091ff" : "none" }}
+              >
                 <div>{period.index + 1}</div>
                 <div>
                   <Tooltip
